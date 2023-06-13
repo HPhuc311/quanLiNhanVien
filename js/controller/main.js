@@ -39,6 +39,9 @@ function renderdsnv(){
         <td>${nv.chucVu}</td>
         <td>${nv.tongLuong()}</td>
         <td>${nv.xepLoai()}</td>
+        <td>
+        <button class='btn btn-danger' onclick="xoaNhanVien('${nv.taiKhoan}')">Xóa</button>
+        </td>
         </tr>`
     }
     getElement('#tableDanhSach').innerHTML = content
@@ -83,6 +86,47 @@ function getLocalStorage(){
 
 }
 getLocalStorage()
+
+function xoaNhanVien(taiKhoan){
+    dsnv.xoaNV(taiKhoan)
+    // sau khi xóa thì render lại
+    renderdsnv()
+    // cập nhật lại data
+    setLocalStorage()
+}
+
+// update nhân viên 
+function capNhatNhanVien(taiKhoan){
+    var index = dsnv.timNV(taiKhoan)
+    var nv = dsnv.arrNV[index]
+    // đẩy data lên input
+    getElement('#tknv').value = nv.taiKhoan
+    getElement('#name').value = nv.hoVaTen
+    getElement('#email').value = nv.email
+    getElement('#password').value =  nv.password
+    getElement('#datepicker').value = nv.ngayLam
+    getElement('#luongCB').value =  nv.luongCoBan
+    getElement('#chucvu').value = nv.chucVu
+    getElement('#gioLam').value =  nv.gioLam
+}
+
+// Lấy lại thông tin người dùng sau khi chỉnh sửa xong 
+getElement('#btnCapNhat').onclick = function(){
+    var nhanVien = getThongTinNhanVien()
+    // cập nhật lại sinh viên 
+    dsnv.capNhat(nhanVien)
+    // render lên lại UI 
+    renderdsnv()
+    // cập nhật lại data local storage
+    setLocalStorage()
+    // reset form 
+    getElement('#formQLNV').reset()
+}
+
+
+
+
+// Thêm người dùng 
 getElement('#btnThemNV').onclick = function (){
     var nv = getThongTinNhanVien()
     dsnv.themNV(nv)
@@ -92,6 +136,10 @@ getElement('#btnThemNV').onclick = function (){
     // cập nhật lai localStorge
     setLocalStorage()   
 }
+
+
+
+
 
 
 
