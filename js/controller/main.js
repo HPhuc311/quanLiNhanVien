@@ -24,6 +24,27 @@ function getThongTinNhanVien(){
         chucVu,
         gioLam,
     )
+     if(nhanVien.taiKhoan.length < 4 || nhanVien.taiKhoan.length > 6){
+        getElement('.sp-thongbao').style.display = 'block'
+        getElement('#tbTKNV').innerHTML = "*Tài khoản tối đa 4-6 kí tự"
+     }
+     if(nhanVien.taiKhoan.trim() === '') {
+        getElement('.sp-thongbao').style.display = 'block'
+        getElement('#tbTKNV').innerHTML = "*Tài khoản không được để trống"
+     }
+
+     
+
+
+
+
+
+
+
+
+
+
+
     return nhanVien
 }
 // Xuất lên UI cho user
@@ -136,11 +157,3 @@ getElement('#btnThemNV').onclick = function (){
     // cập nhật lai localStorge
     setLocalStorage()   
 }
-
-
-
-
-
-
-
-
