@@ -2,6 +2,62 @@ function getElement (element){
     return document.querySelector(element)
 }
 
+function validateTaiKhoan(taiKhoanNhanVien){
+    if(taiKhoanNhanVien.taiKhoan.length < 4 && taiKhoanNhanVien.taiKhoan.length >= 1 || taiKhoanNhanVien.taiKhoan.length > 6 ){
+        getElement('.sp-thongbao1').style.display = 'block'
+        getElement('#tbTKNV').innerHTML = "*Tài khoản tối đa 4-6 kí tự."
+    }else if(taiKhoanNhanVien.taiKhoan.trim().length < 1) {
+        getElement('.sp-thongbao1').style.display = 'block'
+        getElement('#tbTKNV').innerHTML = "*Tài khoản không được để trống."
+    }else{
+        getElement('.sp-thongbao1').style.display = 'none'
+    }
+
+}
+function validateTenNhanVien(tenNhanVien){
+    var filter = /^[A-Za-z]+$/;
+    if(tenNhanVien.hoVaTen.length < 1) {
+        getElement('.sp-thongbao2').style.display = 'block'
+        getElement('#tbTen').innerHTML = "*Họ và tên không được để trống."
+      }else if(!filter.test(tenNhanVien)){
+        getElement('.sp-thongbao2').style.display = 'block'
+        getElement('#tbTen').innerHTML = "*Họ và tên phải là chữ không được chứa kí tự."
+      }else{
+        getElement('.sp-thongbao2').style.display = 'none'
+      }
+}
+function validateEmail(tenEmailNhanVien){
+    var filter =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(tenEmailNhanVien.email.length < 1){ 
+        getElement('.sp-thongbao3').style.display = 'block'
+        getElement('#tbEmail').innerHTML = "*Không được để trống email."
+    }else if(!filter.test(tenEmailNhanVien.email)){
+        getElement('.sp-thongbao3').style.display = 'block'
+        getElement('#tbEmail').innerHTML = "*Email phải đúng định dạng."
+    }else{
+        getElement('.sp-thongbao3').style.display = 'none'
+    }
+}
+
+function validatePassword(matKhauNhanVien){
+    var filter = /^(?=.*\d)(?=.*[A-Z])(?=.*\W).+$/
+    if(matKhauNhanVien.password.length < 1){
+        getElement('.sp-thongbao4').style.display = 'block'
+        getElement('#tbMatKhau').innerHTML = "*Mật khẩu không được để trống."
+    }else if(matKhauNhanVien.password.length < 6 || matKhauNhanVien.password.length > 10){
+        getElement('.sp-thongbao4').style.display = 'block'
+        getElement('#tbMatKhau').innerHTML = "*Mật khẩu chỉ được chứa từ 6 đến 10 kí tư"
+    }else if(!filter.test(matKhauNhanVien.password)){
+        getElement('.sp-thongbao4').style.display = 'block'
+        getElement('#tbMatKhau').innerHTML = "*Mật khẩu chứa ít nhất 1 ký tự số, 1 ký tự in hoa, 1 ký tự đặc biệt"
+    }else{
+        getElement('.sp-thongbao4').style.display = 'none'
+    }
+}
+
+
+
+
 var dsnv = new DSNV()
 
 function getThongTinNhanVien(){
@@ -24,26 +80,13 @@ function getThongTinNhanVien(){
         chucVu,
         gioLam,
     )
-     if(nhanVien.taiKhoan.length < 4 || nhanVien.taiKhoan.length > 6){
-        getElement('.sp-thongbao').style.display = 'block'
-        getElement('#tbTKNV').innerHTML = "*Tài khoản tối đa 4-6 kí tự"
-     }
-     if(nhanVien.taiKhoan.trim() === '') {
-        getElement('.sp-thongbao').style.display = 'block'
-        getElement('#tbTKNV').innerHTML = "*Tài khoản không được để trống"
-     }
+    validateTaiKhoan(nhanVien)
 
-     
+    validateTenNhanVien(nhanVien)
 
+    validateEmail(nhanVien)
 
-
-
-
-
-
-
-
-
+    validatePassword(nhanVien)
 
     return nhanVien
 }
@@ -151,7 +194,6 @@ getElement('#btnCapNhat').onclick = function(){
 getElement('#btnThemNV').onclick = function (){
     var nv = getThongTinNhanVien()
     dsnv.themNV(nv)
-    console.log(dsnv.arrNV)
     // render nv ra giao diện 
     renderdsnv()
     // cập nhật lai localStorge
