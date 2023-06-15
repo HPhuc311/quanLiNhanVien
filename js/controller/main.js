@@ -54,12 +54,7 @@ function validatePassword(matKhauNhanVien){
         getElement('.sp-thongbao4').style.display = 'none'
     }
 }
-
-
-
-
 var dsnv = new DSNV()
-
 function getThongTinNhanVien(){
     var taiKhoan = getElement('#tknv').value
     var hoVaTen = getElement('#name').value
@@ -81,13 +76,9 @@ function getThongTinNhanVien(){
         gioLam,
     )
     validateTaiKhoan(nhanVien)
-
     validateTenNhanVien(nhanVien)
-
     validateEmail(nhanVien)
-
-    validatePassword(nhanVien)
-
+    // validatePassword(nhanVien)
     return nhanVien
 }
 // Xuất lên UI cho user
@@ -150,7 +141,6 @@ function getLocalStorage(){
 
 }
 getLocalStorage()
-
 function xoaNhanVien(taiKhoan){
     dsnv.xoaNV(taiKhoan)
     // sau khi xóa thì render lại
@@ -158,7 +148,6 @@ function xoaNhanVien(taiKhoan){
     // cập nhật lại data
     setLocalStorage()
 }
-
 // update nhân viên 
 function capNhatNhanVien(taiKhoan){
     var index = dsnv.timNV(taiKhoan)
@@ -173,7 +162,6 @@ function capNhatNhanVien(taiKhoan){
     getElement('#chucvu').value = nv.chucVu
     getElement('#gioLam').value =  nv.gioLam
 }
-
 // Lấy lại thông tin người dùng sau khi chỉnh sửa xong 
 getElement('#btnCapNhat').onclick = function(){
     var nhanVien = getThongTinNhanVien()
@@ -186,10 +174,6 @@ getElement('#btnCapNhat').onclick = function(){
     // reset form 
     getElement('#formQLNV').reset()
 }
-
-
-
-
 // Thêm người dùng 
 getElement('#btnThemNV').onclick = function (){
     var nv = getThongTinNhanVien()
@@ -197,5 +181,5 @@ getElement('#btnThemNV').onclick = function (){
     // render nv ra giao diện 
     renderdsnv()
     // cập nhật lai localStorge
-    setLocalStorage()   
+    setLocalStorage()
 }
