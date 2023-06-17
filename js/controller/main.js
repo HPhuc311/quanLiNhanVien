@@ -40,16 +40,13 @@ function validateEmail(tenEmailNhanVien){
 }
 
 function validatePassword(matKhauNhanVien){
-    var filter = /^(?=.*\d)(?=.*[A-Z])(?=.*\W).+$/
-    if(matKhauNhanVien.password.length < 1){
+    var passwordPattern = /^(?=.*\d)(?=.*[A-Z])(?=.*\W).{6,10}$/;
+    if(!passwordPattern.test(matKhauNhanVien.password)) {
         getElement('.sp-thongbao4').style.display = 'block'
-        getElement('#tbMatKhau').innerHTML = "*Mật khẩu không được để trống."
-    }else if(matKhauNhanVien.password.length < 6 || matKhauNhanVien.password.length > 10){
+        getElement('#tbMatKhau').innerHTML = "*Password phải chứa ít nhất 1 ký tự số, 1 ký tự in hoa, 1 ký tự đặc biệt."
+    }else if(matKhauNhanVien.password === ""){
         getElement('.sp-thongbao4').style.display = 'block'
-        getElement('#tbMatKhau').innerHTML = "*Mật khẩu chỉ được chứa từ 6 đến 10 kí tư"
-    }else if(!filter.test(matKhauNhanVien.password)){
-        getElement('.sp-thongbao4').style.display = 'block'
-        getElement('#tbMatKhau').innerHTML = "*Mật khẩu chứa ít nhất 1 ký tự số, 1 ký tự in hoa, 1 ký tự đặc biệt"
+        getElement('#tbMatKhau').innerHTML = "*Password không được để trống."
     }else{
         getElement('.sp-thongbao4').style.display = 'none'
     }
@@ -78,7 +75,7 @@ function getThongTinNhanVien(){
     validateTaiKhoan(nhanVien)
     validateTenNhanVien(nhanVien)
     validateEmail(nhanVien)
-    // validatePassword(nhanVien)
+    validatePassword(nhanVien)
     return nhanVien
 }
 // Xuất lên UI cho user
