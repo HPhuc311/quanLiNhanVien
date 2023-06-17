@@ -77,3 +77,52 @@ function kiemTraPattern (value,content,span,pattern,messErr){
     return true
 }
 
+/**
+ * 
+ * @param  value giá trị cần kiểm tra
+ * @param  min giá trị tối thiểu
+ * @param  max giá trị tối đa
+ * @param  content thẻ hiển nội dunng
+ * @param  span đổi style của thẻ 
+ * @param  messErr nội dung hiển thị lỗi
+ */
+
+function kiemTraSo (value,min,max,content,span,messErr){
+    if(value < min || value > Number(max)){
+        getElement(span).style.display = "block"
+        getElement(content).innerHTML = messErr
+        return false
+    }else{
+        getElement(span).style.display = "none"
+        return true
+    }
+}
+
+
+/**
+ * 
+ * @param value : giá trị cần kiểm tra 
+ * @param content : thẻ nội dung cần thay đổi
+ * @param span : đổi style của thẻ 
+ * @param messErr: nội dung hiển thị lỗi
+ */
+
+
+function kiemTraChucVu (value,content,span,messErr){
+    if(value === 'Sếp'){
+        getElement(span).style.display = "none"
+        return true
+    }else if(value === 'Trưởng phòng'){
+        getElement(span).style.display = "none"
+        return true
+    }else if(value === 'Nhân viên'){
+        getElement(span).style.display = "none"
+        return true
+    }else{
+        getElement(span).style.display = "block"
+        getElement(content).innerHTML = messErr
+        return false
+    }
+}
+
+

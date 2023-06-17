@@ -42,16 +42,30 @@ function getThongTinNhanVien(isEdit){
     kiemTraNoiDung(nhanVien.password,6,10,'#tbMatKhau','.sp-thongbao4',"*Mật khẩu tối đa 6-10 kí tự.") && 
     kiemTraPattern(nhanVien.password,'#tbMatKhau','.sp-thongbao4',/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{0,}$/, '*chứa ít nhất 1 ký tự số, 1 ký tự in hoa, 1 ký tự đặc biệt')
     // Kiểm tra ngày tháng
+    isVaild &=
+    kiemTraNoiDung(nhanVien.ngayLam,1,undefined,'#tbNgay','.sp-thongbao5',"*Ngày tháng không được để trống.")&&
+    kiemTraPattern(nhanVien.ngayLam,'#tbNgay','.sp-thongbao5',/^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[012])\/\d{4}$/, '*chưa đúng định dạng')
+    // Kiểm tra số lương 
+    isVaild &=
+    kiemTraSo(nhanVien.luongCoBan,1,undefined,'#tbLuongCB','.sp-thongbao6',"*Số lương không được để trống.") &&
+    kiemTraSo(nhanVien.luongCoBan,1000000,20000000,'#tbLuongCB','.sp-thongbao6',"*Số lương không hợp lệ.")
+    // Kiểm tra chức vụ
+    isVaild &=
+    kiemTraChucVu(nhanVien.chucVu,'#tbChucVu','.sp-thongbao7','*Tùy chọn không hợp lệ')
+    // Kiểm tra số giờ làm trong tháng
+    kiemTraSo(nhanVien.gioLam,1,undefined,'#tbGiolam','.sp-thongbao8',"*Số giờ làm không được để trống.") &&
+    kiemTraSo(nhanVien.gioLam,80,200,'#tbGiolam','.sp-thongbao8',"*Số giờ làm không không hợp lệ.")
     
-
+        // reset form 
+        getElement('#formQLNV').reset()
 
     return isVaild ? nhanVien: undefined
 }
 // Xuất lên UI cho user
-function renderdsnv(){
-    var content = []
-    for (var i = 0; i < dsnv.arrNV.length; i++){
-        var nv = dsnv.arrNV[i]
+function renderdsnv(arrNV = dsnv.arrNV){
+    var content = ''
+    for (var i = 0; i < arrNV.length; i++){
+        var nv = arrNV[i]
         content += `<tr>
         <td>${nv.taiKhoan}</td>
         <td>${nv.hoVaTen}</td>
@@ -62,6 +76,7 @@ function renderdsnv(){
         <td>${nv.xepLoai()}</td>
         <td>
         <button class='btn btn-danger' onclick="xoaNhanVien('${nv.taiKhoan}')">Xóa</button>
+        <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#myModal" onclick="capNhatNhanVien('${nv.taiKhoan}')">Edit</button>
         </td>
         </tr>`
     }
@@ -116,13 +131,14 @@ function xoaNhanVien(taiKhoan){
 }
 // update nhân viên 
 function capNhatNhanVien(taiKhoan){
+    getElement('#btnCapNhat').style.display = 'block'
     var index = dsnv.timNV(taiKhoan)
     var nv = dsnv.arrNV[index]
     // đẩy data lên input
     getElement('#tknv').value = nv.taiKhoan
     getElement('#name').value = nv.hoVaTen
     getElement('#email').value = nv.email
-    getElement('#password').value =  nv.matKhau
+    getElement('#password').value =  nv.password
     getElement('#datepicker').value = nv.ngayLam
     getElement('#luongCB').value =  nv.luongCoBan
     getElement('#chucvu').value = nv.chucVu
@@ -130,7 +146,7 @@ function capNhatNhanVien(taiKhoan){
 }
 // Lấy lại thông tin người dùng sau khi chỉnh sửa xong 
 getElement('#btnCapNhat').onclick = function(){
-    var nhanVien = getThongTinNhanVien()
+    var nhanVien = getThongTinNhanVien(true)
     // cập nhật lại sinh viên 
     dsnv.capNhat(nhanVien)
     // render lên lại UI 
@@ -142,7 +158,8 @@ getElement('#btnCapNhat').onclick = function(){
 }
 // Thêm người dùng 
 getElement('#btnThemNV').onclick = function (){
-    var nv = getThongTinNhanVien()
+    getElement('#btnCapNhat').style.display = 'none'
+    var nv = getThongTinNhanVien(false)
     if(nv){
     dsnv.themNV(nv)
     // render nv ra giao diện 
@@ -150,5 +167,14 @@ getElement('#btnThemNV').onclick = function (){
     // cập nhật lai localStorge
     setLocalStorage()
     }
+
 }
+
+getElement('#btnThem').onclick = function (){
+    getElement('#btnCapNhat').style.display = 'none'
+    // reset form 
+    getElement('#formQLNV').reset()
+}
+
+
 
