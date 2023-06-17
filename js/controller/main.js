@@ -48,6 +48,7 @@ function getThongTinNhanVien(isEdit){
     // Kiểm tra số lương 
     isVaild &=
     kiemTraSo(nhanVien.luongCoBan,1,undefined,'#tbLuongCB','.sp-thongbao6',"*Số lương không được để trống.") &&
+    kiemTraPattern(nhanVien.luongCoBan,'#tbLuongCB','.sp-thongbao6',/^[0-9]+$/, '*Không đúng định dạng') &&
     kiemTraSo(nhanVien.luongCoBan,1000000,20000000,'#tbLuongCB','.sp-thongbao6',"*Số lương không hợp lệ.")
     // Kiểm tra chức vụ
     isVaild &=
@@ -55,9 +56,6 @@ function getThongTinNhanVien(isEdit){
     // Kiểm tra số giờ làm trong tháng
     kiemTraSo(nhanVien.gioLam,1,undefined,'#tbGiolam','.sp-thongbao8',"*Số giờ làm không được để trống.") &&
     kiemTraSo(nhanVien.gioLam,80,200,'#tbGiolam','.sp-thongbao8',"*Số giờ làm không không hợp lệ.")
-    
-        // reset form 
-        getElement('#formQLNV').reset()
 
     return isVaild ? nhanVien: undefined
 }
@@ -131,6 +129,7 @@ function xoaNhanVien(taiKhoan){
 }
 // update nhân viên 
 function capNhatNhanVien(taiKhoan){
+    getElement('#btnThemNV').style.display = 'none'
     getElement('#btnCapNhat').style.display = 'block'
     var index = dsnv.timNV(taiKhoan)
     var nv = dsnv.arrNV[index]
@@ -169,11 +168,24 @@ getElement('#btnThemNV').onclick = function (){
     }
 
 }
+// Tìm kiếm tên sinh viên
 
+getElement('#searchName').addEventListener('keyup', function(){
+    var valueSearch = getElement('#searchName').value.toLowerCase()
+    var arrNvSearch = []
+    console.log(arrNvSearch)
+    for(var i = 0; i < dsnv.arrNV.length; i++){
+        var tenNV = dsnv.arrNV[i].xepLoai().toLowerCase()
+        if(tenNV.indexOf(valueSearch) !== -1){
+            arrNvSearch.push(dsnv.arrNV[i])
+        }
+    }
+    renderdsnv(arrNvSearch)
+})
 getElement('#btnThem').onclick = function (){
+    getElement('#btnThemNV').style.display = 'block'
     getElement('#btnCapNhat').style.display = 'none'
     // reset form 
-    getElement('#formQLNV').reset()
 }
 
 
