@@ -1,58 +1,8 @@
 function getElement (element){
     return document.querySelector(element)
 }
-
-function validateTaiKhoan(taiKhoanNhanVien){
-    if(taiKhoanNhanVien.taiKhoan.length < 4 && taiKhoanNhanVien.taiKhoan.length >= 1 || taiKhoanNhanVien.taiKhoan.length > 6 ){
-        getElement('.sp-thongbao1').style.display = 'block'
-        getElement('#tbTKNV').innerHTML = "*Tài khoản tối đa 4-6 kí tự."
-    }else if(taiKhoanNhanVien.taiKhoan.trim().length < 1) {
-        getElement('.sp-thongbao1').style.display = 'block'
-        getElement('#tbTKNV').innerHTML = "*Tài khoản không được để trống."
-    }else{
-        getElement('.sp-thongbao1').style.display = 'none'
-    }
-
-}
-function validateTenNhanVien(tenNhanVien){
-    var filter = /^[A-Za-z]+$/;
-    if(tenNhanVien.hoVaTen.length < 1) {
-        getElement('.sp-thongbao2').style.display = 'block'
-        getElement('#tbTen').innerHTML = "*Họ và tên không được để trống."
-      }else if(!filter.test(tenNhanVien)){
-        getElement('.sp-thongbao2').style.display = 'block'
-        getElement('#tbTen').innerHTML = "*Họ và tên phải là chữ không được chứa kí tự."
-      }else{
-        getElement('.sp-thongbao2').style.display = 'none'
-      }
-}
-function validateEmail(tenEmailNhanVien){
-    var filter =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if(tenEmailNhanVien.email.length < 1){ 
-        getElement('.sp-thongbao3').style.display = 'block'
-        getElement('#tbEmail').innerHTML = "*Không được để trống email."
-    }else if(!filter.test(tenEmailNhanVien.email)){
-        getElement('.sp-thongbao3').style.display = 'block'
-        getElement('#tbEmail').innerHTML = "*Email phải đúng định dạng."
-    }else{
-        getElement('.sp-thongbao3').style.display = 'none'
-    }
-}
-
-function validatePassword(matKhauNhanVien){
-    var passwordPattern = /^(?=.*\d)(?=.*[A-Z])(?=.*\W).{6,10}$/;
-    if(!passwordPattern.test(matKhauNhanVien.password)) {
-        getElement('.sp-thongbao4').style.display = 'block'
-        getElement('#tbMatKhau').innerHTML = "*Password phải chứa ít nhất 1 ký tự số, 1 ký tự in hoa, 1 ký tự đặc biệt."
-    }else if(matKhauNhanVien.password === ""){
-        getElement('.sp-thongbao4').style.display = 'block'
-        getElement('#tbMatKhau').innerHTML = "*Password không được để trống."
-    }else{
-        getElement('.sp-thongbao4').style.display = 'none'
-    }
-}
 var dsnv = new DSNV()
-function getThongTinNhanVien(){
+function getThongTinNhanVien(isEdit){
     var taiKhoan = getElement('#tknv').value
     var hoVaTen = getElement('#name').value
     var email = getElement('#email').value
@@ -72,11 +22,30 @@ function getThongTinNhanVien(){
         chucVu,
         gioLam,
     )
-    validateTaiKhoan(nhanVien)
-    validateTenNhanVien(nhanVien)
-    validateEmail(nhanVien)
-    validatePassword(nhanVien)
-    return nhanVien
+    var isVaild = true 
+    // Kiểm tra tài khoản
+    isVaild &=
+    kiemTraNoiDung(nhanVien.taiKhoan,1,undefined,'#tbTKNV','.sp-thongbao1',"*Tài khoản không được để trống.") &&
+    kiemTraNoiDung(nhanVien.taiKhoan,4,6,'#tbTKNV','.sp-thongbao1',"*Tài khoản tối đa 4-6 kí tự.") &&
+    kiemTraMaNV(nhanVien.taiKhoan,dsnv.arrNV, isEdit,'#tbTKNV','.sp-thongbao1','Tài khoản nhân viên đã tồn tại')
+    // Kiểm tra họ và tên
+    isVaild &=
+    kiemTraNoiDung(nhanVien.hoVaTen,1,undefined,'#tbTen','.sp-thongbao2',"*Họ và tên không được để trống.") &&
+    kiemTraPattern(nhanVien.hoVaTen,'#tbTen', '.sp-thongbao2', /^[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶ" + "ẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợ" + "ụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\\s]+$/, '*Họ và tên chưa đúng định dạng')
+    // Kiểm tra email
+    isVaild &=
+    kiemTraNoiDung(nhanVien.email,1,undefined,'#tbEmail','.sp-thongbao3',"*Email không được để trống.") &&
+    kiemTraPattern(nhanVien.email,'#tbEmail', '.sp-thongbao3', /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, '*Email chưa đúng định dạng')
+    // Kiểm tra password
+    isVaild &=
+    kiemTraNoiDung(nhanVien.password,1,undefined,'#tbMatKhau','.sp-thongbao4',"*Mật khẩu không được để trống.")&&
+    kiemTraNoiDung(nhanVien.password,6,10,'#tbMatKhau','.sp-thongbao4',"*Mật khẩu tối đa 6-10 kí tự.") && 
+    kiemTraPattern(nhanVien.password,'#tbMatKhau','.sp-thongbao4',/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{0,}$/, '*chứa ít nhất 1 ký tự số, 1 ký tự in hoa, 1 ký tự đặc biệt')
+    // Kiểm tra ngày tháng
+    
+
+
+    return isVaild ? nhanVien: undefined
 }
 // Xuất lên UI cho user
 function renderdsnv(){
@@ -124,7 +93,7 @@ function getLocalStorage(){
                 nv.taiKhoan,
                 nv.hoVaTen,
                 nv.email,
-                nv.password,
+                nv.matKhau,
                 nv.ngayLam,
                 nv.luongCoBan,
                 nv.chucVu,
@@ -153,7 +122,7 @@ function capNhatNhanVien(taiKhoan){
     getElement('#tknv').value = nv.taiKhoan
     getElement('#name').value = nv.hoVaTen
     getElement('#email').value = nv.email
-    getElement('#password').value =  nv.password
+    getElement('#password').value =  nv.matKhau
     getElement('#datepicker').value = nv.ngayLam
     getElement('#luongCB').value =  nv.luongCoBan
     getElement('#chucvu').value = nv.chucVu
@@ -174,9 +143,12 @@ getElement('#btnCapNhat').onclick = function(){
 // Thêm người dùng 
 getElement('#btnThemNV').onclick = function (){
     var nv = getThongTinNhanVien()
+    if(nv){
     dsnv.themNV(nv)
     // render nv ra giao diện 
     renderdsnv()
     // cập nhật lai localStorge
     setLocalStorage()
+    }
 }
+

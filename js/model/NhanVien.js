@@ -13,7 +13,7 @@ function NhanVien (
     ;(this.taiKhoan = _taiKhoan),
     (this.hoVaTen = _hoVaTen),
     (this.email = _email),
-    (this.matKhau = _matKhau),
+    (this.password = _matKhau),
     (this.ngayLam = _ngayLam),
     (this.luongCoBan = _luongCoBan),
     (this.chucVu =  _chucVu),
