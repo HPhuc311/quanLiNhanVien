@@ -27,11 +27,11 @@ function getThongTinNhanVien(isEdit){
     isVaild &=
     kiemTraNoiDung(nhanVien.taiKhoan,1,undefined,'#tbTKNV','.sp-thongbao1',"*Tài khoản không được để trống.") &&
     kiemTraNoiDung(nhanVien.taiKhoan,4,6,'#tbTKNV','.sp-thongbao1',"*Tài khoản tối đa 4-6 kí tự.") &&
-    kiemTraMaNV(nhanVien.taiKhoan,dsnv.arrNV, isEdit,'#tbTKNV','.sp-thongbao1','Tài khoản nhân viên đã tồn tại')
+    kiemTraMaNV(nhanVien.taiKhoan,dsnv.arrNV, isEdit,'#tbTKNV','.sp-thongbao1','*Tài khoản nhân viên đã tồn tại')
     // Kiểm tra họ và tên
     isVaild &=
     kiemTraNoiDung(nhanVien.hoVaTen,1,undefined,'#tbTen','.sp-thongbao2',"*Họ và tên không được để trống.") &&
-    kiemTraPattern(nhanVien.hoVaTen,'#tbTen', '.sp-thongbao2', /^[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶ" + "ẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợ" + "ụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\\s]+$/, '*Họ và tên chưa đúng định dạng')
+    kiemTraPattern(nhanVien.hoVaTen,'#tbTen', '.sp-thongbao2', /^[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶ" + "ẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợ" + "ụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/, '*Họ và tên chưa đúng định dạng')
     // Kiểm tra email
     isVaild &=
     kiemTraNoiDung(nhanVien.email,1,undefined,'#tbEmail','.sp-thongbao3',"*Email không được để trống.") &&
@@ -73,14 +73,13 @@ function renderdsnv(arrNV = dsnv.arrNV){
         <td>${nv.tongLuong()}</td>
         <td>${nv.xepLoai()}</td>
         <td>
-        <button class='btn btn-danger' onclick="xoaNhanVien('${nv.taiKhoan}')">Xóa</button>
-        <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#myModal" onclick="capNhatNhanVien('${nv.taiKhoan}')">Edit</button>
+        <button class='btn btn-danger mt-2' onclick="xoaNhanVien('${nv.taiKhoan}')">Xóa</button>
+        <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#myModal" onclick="chinhSuaNhanVien('${nv.taiKhoan}')">Edit</button>
         </td>
         </tr>`
     }
     getElement('#tableDanhSach').innerHTML = content
 }
-
 // lưu thông tin nhân viên vào local storage:
 function setLocalStorage (){
     // b1: Chuyển đổi data về dạng string
@@ -117,7 +116,6 @@ function getLocalStorage(){
         dsnv.arrNV = arr
         renderdsnv()
     }
-
 }
 getLocalStorage()
 function xoaNhanVien(taiKhoan){
@@ -127,8 +125,9 @@ function xoaNhanVien(taiKhoan){
     // cập nhật lại data
     setLocalStorage()
 }
-// update nhân viên 
-function capNhatNhanVien(taiKhoan){
+// chỉnh sửa nhân viên 
+function chinhSuaNhanVien(taiKhoan){
+    getElement('#tknv').disabled= true
     getElement('#btnThemNV').style.display = 'none'
     getElement('#btnCapNhat').style.display = 'block'
     var index = dsnv.timNV(taiKhoan)
@@ -165,11 +164,12 @@ getElement('#btnThemNV').onclick = function (){
     renderdsnv()
     // cập nhật lai localStorge
     setLocalStorage()
+    // reset form 
+    getElement('#formQLNV').reset()
     }
 
 }
 // Tìm kiếm tên sinh viên
-
 getElement('#searchName').addEventListener('keyup', function(){
     var valueSearch = getElement('#searchName').value.toLowerCase()
     var arrNvSearch = []
@@ -183,9 +183,11 @@ getElement('#searchName').addEventListener('keyup', function(){
     renderdsnv(arrNvSearch)
 })
 getElement('#btnThem').onclick = function (){
+    getElement('#tknv').disabled= false
     getElement('#btnThemNV').style.display = 'block'
     getElement('#btnCapNhat').style.display = 'none'
     // reset form 
+    getElement('#formQLNV').reset()
 }
 
 
