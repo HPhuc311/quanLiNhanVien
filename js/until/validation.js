@@ -119,10 +119,33 @@ function kiemTraChucVu (value,content,span,messErr){
         getElement(span).style.display = "none"
         return true
     }else{
-        getElement(span).style.display = "block"
+        getElement(span).styccle.display = "block"
         getElement(content).innerHTML = messErr
         return false
     }
 }
 
 
+/**
+ * 
+ * @param content1: thẻ hiển thị nội dung 
+ * @param content2: thẻ hiển thị nội dung 
+ * @param content3: thẻ hiển thị nội dung 
+ * @param content4: thẻ hiển thị nội dung 
+ * @param content5: thẻ hiển thị nội dung 
+ * @param content6: thẻ hiển thị nội dung 
+ * @param content7: thẻ hiển thị nội dung 
+ * @param content8: thẻ hiển thị nội dung 
+ */
+
+
+function chuyenDoiThe(content1,content2,content3,content4,content5,content6,content7,content8){
+    getElement(content2).style.display=  'none'
+    getElement(content3).style.display=  'none'
+    getElement(content4).style.display=  'none'
+    getElement(content5).style.display=  'none'
+    getElement(content6).style.display=  'none'
+    getElement(content7).style.display=  'none'
+    getElement(content8).style.display=  'none'
+    getElement(content1).style.display=  'none'
+}

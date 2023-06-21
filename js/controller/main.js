@@ -127,6 +127,7 @@ function xoaNhanVien(taiKhoan){
 }
 // chỉnh sửa nhân viên 
 function chinhSuaNhanVien(taiKhoan){
+    chuyenDoiThe('.sp-thongbao1','.sp-thongbao2','.sp-thongbao3','.sp-thongbao4','.sp-thongbao5','.sp-thongbao6','.sp-thongbao7','.sp-thongbao8',)
     getElement('#tknv').disabled= true
     getElement('#btnThemNV').style.display = 'none'
     getElement('#btnCapNhat').style.display = 'block'
