@@ -119,7 +119,7 @@ function kiemTraChucVu (value,content,span,messErr){
         getElement(span).style.display = "none"
         return true
     }else{
-        getElement(span).styccle.display = "block"
+        getElement(span).style.display = "block"
         getElement(content).innerHTML = messErr
         return false
     }

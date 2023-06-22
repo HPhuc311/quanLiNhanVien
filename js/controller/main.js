@@ -55,7 +55,7 @@ function getThongTinNhanVien(isEdit){
     kiemTraChucVu(nhanVien.chucVu,'#tbChucVu','.sp-thongbao7','*Tùy chọn không hợp lệ')
     // Kiểm tra số giờ làm trong tháng
     kiemTraSo(nhanVien.gioLam,1,undefined,'#tbGiolam','.sp-thongbao8',"*Số giờ làm không được để trống.") &&
-    kiemTraSo(nhanVien.gioLam,80,200,'#tbGiolam','.sp-thongbao8',"*Số giờ làm không không hợp lệ.")
+    kiemTraSo(nhanVien.gioLam,80,200,'#tbGiolam','.sp-thongbao8',"*Số giờ làm không hợp lệ.")
 
     return isVaild ? nhanVien: undefined
 }
