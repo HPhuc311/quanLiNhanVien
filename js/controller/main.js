@@ -44,7 +44,7 @@ function getThongTinNhanVien(isEdit){
     // Kiểm tra ngày tháng
     isVaild &=
     kiemTraNoiDung(nhanVien.ngayLam,1,undefined,'#tbNgay','.sp-thongbao5',"*Ngày tháng không được để trống.")&&
-    kiemTraPattern(nhanVien.ngayLam,'#tbNgay','.sp-thongbao5',/^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[012])\/\d{4}$/, '*chưa đúng định dạng')
+    kiemTraPattern(nhanVien.ngayLam,'#tbNgay','.sp-thongbao5',/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/ , '*chưa đúng định dạng')
     // Kiểm tra số lương 
     isVaild &=
     kiemTraSo(nhanVien.luongCoBan,1,undefined,'#tbLuongCB','.sp-thongbao6',"*Số lương không được để trống.") &&
@@ -54,6 +54,7 @@ function getThongTinNhanVien(isEdit){
     isVaild &=
     kiemTraChucVu(nhanVien.chucVu,'#tbChucVu','.sp-thongbao7','*Tùy chọn không hợp lệ')
     // Kiểm tra số giờ làm trong tháng
+    isVaild &=
     kiemTraSo(nhanVien.gioLam,1,undefined,'#tbGiolam','.sp-thongbao8',"*Số giờ làm không được để trống.") &&
     kiemTraSo(nhanVien.gioLam,80,200,'#tbGiolam','.sp-thongbao8',"*Số giờ làm không hợp lệ.")
 
@@ -185,6 +186,7 @@ getElement('#searchName').addEventListener('keyup', function(){
 })
 getElement('#btnThem').onclick = function (){
     getElement('#tknv').disabled= false
+    chuyenDoiThe('.sp-thongbao1','.sp-thongbao2','.sp-thongbao3','.sp-thongbao4','.sp-thongbao5','.sp-thongbao6','.sp-thongbao7','.sp-thongbao8',)
     getElement('#btnThemNV').style.display = 'block'
     getElement('#btnCapNhat').style.display = 'none'
     // reset form 
