@@ -119,6 +119,7 @@ function getLocalStorage(){
     }
 }
 getLocalStorage()
+
 function xoaNhanVien(taiKhoan){
     dsnv.xoaNV(taiKhoan)
     // sau khi xóa thì render lại
